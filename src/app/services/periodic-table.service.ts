@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ELEMENT_DATA } from '../components/data';
 import { PeriodicElement } from '../interfaces';
 
@@ -7,9 +7,12 @@ import { PeriodicElement } from '../interfaces';
   providedIn: 'root',
 })
 export class PeriodicTableService {
-  constructor() {}
+  private elementsSubject = new BehaviorSubject<PeriodicElement[]>(
+    ELEMENT_DATA
+  );
+  elements$ = this.elementsSubject.asObservable();
 
-  public getProducts(): Observable<PeriodicElement[]> {
-    return of(ELEMENT_DATA);
+  public updateElements(newElements: PeriodicElement[]) {
+    this.elementsSubject.next(newElements);
   }
 }
